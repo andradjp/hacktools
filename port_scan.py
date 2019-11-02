@@ -9,15 +9,18 @@ import socket
 import sys
 import errno
 import os
+import argparse
+import ipaddress
 
 
 class MyPortScan(object):
 
-    default_ports = [21, 22, 23, 53, 80, 443, 3389, 389, 3306, 1521, 8080, 8000]
-
-    def __init__(self, ip, portlist=default_ports):
+    def __init__(self, ip, portlist):
         self.ip = ip
-        self.portlist = portlist
+        if type(portlist) is str:
+            self.portlist = [int(x) for x in portlist.split(',')]
+        else:
+            self.portlist = portlist
 
     def check_port_socket(self):
 
@@ -25,7 +28,7 @@ class MyPortScan(object):
             for port in self.portlist:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.settimeout(5)
-                result = s.connect_ex((self.ip, port))
+                result = s.connect_ex((str(self.ip), port))
                 if result == 0:
                     print('Port {}:\tOpen'.format(port))
                 else:
@@ -39,5 +42,12 @@ class MyPortScan(object):
             sys.exit()
 
 
-thread = MyPortScan('127.0.0.1')
-thread.check_port_socket()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Scan ports TCP\nVersion: 0.1')
+    parser.add_argument('-t', dest='target', help='Target host IPv4', type=ipaddress.IPv4Address, required=True)
+    parser.add_argument('-p', dest='ports', help='Ports seperated by comma', type=str, default=[21, 22, 23, 53, 80, 443,
+                                                                                                3389, 389, 3306, 1521,
+                                                                                                8080, 8000])
+    params = parser.parse_args()
+    m = MyPortScan(params.target, params.ports)
+    m.check_port_socket()
