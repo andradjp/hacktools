@@ -1,9 +1,9 @@
-'''
+"""
 Version: 0.1
 Author: João Paulo Andrade
 Data: 06/10/2019
 Description: Script to scan port of hosts
-'''
+"""
 
 import socket
 import sys
@@ -45,7 +45,7 @@ class MyPortScan(object):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Scan ports TCP\nVersion: 0.1')
     parser.add_argument('-t', dest='target', help='Target host IPv4', type=ipaddress.IPv4Address, required=True)
-    parser.add_argument('-p', dest='ports', help='Ports seperated by comma', type=str, default=[21, 22, 23, 53, 80, 443,
+    parser.add_argument('-p', dest='ports', help='Ports separated by comma', type=str, default=[21, 22, 23, 53, 80, 443,
                                                                                                 3389, 389, 3306, 1521,
                                                                                                 8080, 8000])
     params = parser.parse_args()
