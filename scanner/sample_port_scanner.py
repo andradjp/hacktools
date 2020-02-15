@@ -30,6 +30,12 @@ class MyPortScanner(object):
     # Function that performs the scan on v4 family
     def check_port_socket_v4_tcp(self):
 
+        print('--------------------------------')
+        print('[+] Initializing scan...')
+        print('[+] Parameters:')
+        print('[+] Target host: {}'.format(self.target))
+        print('[+] Ports: {}'.format(self.portlist))
+
         try:
             for port in self.portlist:
                 # Create the v4 socket, AF_INET == V4 Family, SOCK_STREAM == TCP
@@ -39,28 +45,33 @@ class MyPortScanner(object):
                 result = s.connect_ex((str(self.target), port))
                 # If the return code is 0 then the port is OPEN
                 if result == 0:
-                    print('Port {}:\tOpen'.format(port))
+                    print('[+] Port {}: Open'.format(port))
                 # Otherwise, the port is closed
                 else:
-                    print('Port {}:\tClosed'.format(port))
-                    print('\tCode error: {}'.format(errno.errorcode[result]))
-                    print('\tMessage: {}'.format(os.strerror(result)))
+                    print('[!] Port {}: Closed'.format(port))
+                    print('\t[-] Code error: {}'.format(errno.errorcode[result]))
+                    print('\t[-] Message: {}'.format(os.strerror(result)))
                 s.close()
         # If have any problem with connection, the scan will be aborted
         except socket.error as e:
             print(str(e))
-            print('Connection Error')
+            print('[!] Connection Error')
             sys.exit()
+
+        print('[+] Script finished.')
 
 
 # Performs the script
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Scan ports TCP\nVersion: 0.1')
-    parser.add_argument('-t', dest='target_host_v4', help='Target host IPv4',  type=ipaddress.IPv4Address)
+    # Target parameter, accept just IPV4 Address
+    parser.add_argument('-t', dest='target_host_v4', help='Target host IPv4', required=True, type=ipaddress.IPv4Address)
+    # Port that will be scanned, if this parameter not been set then the default ports will be scanned
     parser.add_argument('-p', dest='ports', help='Ports separated by comma', type=str, default=[21, 22, 23, 53, 80, 443,
                                                                                                 3389, 389, 3306, 1521,
                                                                                                 8080, 8000])
     params = parser.parse_args()
-    if params.target_host_v4 is not None:
-        m = MyPortScanner(params.target_host_v4, params.ports)
-        m.check_port_socket_v4()
+    # Create an instance of MyPortScanner
+    m = MyPortScanner(params.target_host_v4, params.ports)
+    # Call the function check_port_socket_v4_tcp
+    m.check_port_socket_v4_tcp()
