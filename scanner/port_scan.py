@@ -54,6 +54,6 @@ if __name__ == "__main__":
         m = MyPortScan(params.target_host_v4, params.ports)
         m.check_port_socket_v4()
     if params.target_range_v4 is not None:
-        print('Range v4 found! (Function not ')
+        print('Range v4 found! (Function not implemented.)')
 
 
