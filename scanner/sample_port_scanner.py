@@ -32,9 +32,8 @@ class MyPortScanner(object):
 
         print('--------------------------------')
         print('[+] Initializing scan...')
-        print('[+] Parameters:')
-        print('[+] Target host: {}'.format(self.target))
-        print('[+] Ports: {}'.format(self.portlist))
+        print('[i] Target host: {}'.format(self.target))
+        print('[i] Ports: {}'.format(self.portlist))
 
         try:
             for port in self.portlist:
@@ -55,7 +54,7 @@ class MyPortScanner(object):
         # If have any problem with connection, the scan will be aborted
         except socket.error as e:
             print(str(e))
-            print('[!] Connection Error')
+            print('[-] Connection Error')
             sys.exit()
 
         print('[+] Script finished.')
