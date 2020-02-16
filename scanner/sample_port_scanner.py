@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 """
-Version: 0.1
-Author: João Paulo Andrade
+__Version__: 0.1
+__Author__: João Paulo Andrade
 Data: 15/02/2020
 Description: Sample scrip for scan host ports with only buit-in functions
 This code just works with addresses of v4 family.
@@ -15,6 +15,7 @@ import errno
 import os
 import argparse
 import ipaddress
+
 
 # Main Class
 class MyPortScanner(object):
